@@ -74,16 +74,19 @@ export default {
   },
   actions: {
     // 登录
-    handleLogin ({ commit }, { userName, password }) {
+    handleLogin ({ commit }, { userName, password, code }) {
       userName = userName.trim()
       return new Promise((resolve, reject) => {
         login({
           userName,
-          password
+          password,
+          code
         }).then(res => {
           const data = res.data
-          commit('setToken', data.token)
-          resolve()
+          if (data.success) {
+            commit('setToken', data.data.token)
+          }
+          resolve(res)
         }).catch(err => {
           reject(err)
         })
@@ -109,14 +112,16 @@ export default {
     getUserInfo ({ state, commit }) {
       return new Promise((resolve, reject) => {
         try {
+          // todo:获取用户信息
           getUserInfo(state.token).then(res => {
-            const data = res.data
+            console.log('getUserInfo', res)
+            const data = res.data.data
             commit('setAvator', data.avator)
             commit('setUserName', data.name)
-            commit('setUserId', data.user_id)
+            commit('setUserId', data.code)
             commit('setAccess', data.access)
             commit('setHasGetInfo', true)
-            resolve(data)
+            resolve(res)
           }).catch(err => {
             reject(err)
           })
