@@ -19,7 +19,7 @@ const USER_MAP = {
 export const login = req => {
   req = JSON.parse(req.body)
   return {
-    data: { token: USER_MAP[req.userName].token },
+    data: { token: req.userName },
     success: true,
     status: 'OK'
   }
@@ -29,7 +29,13 @@ export const getUserInfo = req => {
   const params = getParams(req.url)
   // return USER_MAP[params.token]
   return {
-    data: USER_MAP[params.token],
+    data: USER_MAP[params.token] || {
+      name: params.token,
+      code: '99',
+      access: ['admin'],
+      token: params.token,
+      avator: 'https://avatars0.githubusercontent.com/u/20942571?s=460&v=4'
+    },
     success: true,
     status: 'OK'
   }

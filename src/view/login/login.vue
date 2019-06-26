@@ -42,6 +42,8 @@ export default {
             name: this.$config.homeName
           })
         })
+      }).catch(function (error) {
+        console.log('er', error)
       })
     }
   }
