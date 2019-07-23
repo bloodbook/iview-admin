@@ -1,6 +1,7 @@
 import axios from 'axios'
 import store from '@/store'
-// import { Spin } from 'iview'
+import { Message } from 'iview'
+import { ShowError } from '../components/common/error'
 const addErrorLog = errorInfo => {
   const { statusText, status, request: { responseURL } } = errorInfo
   let info = {
@@ -56,7 +57,11 @@ class HttpRequest {
         window.location.href = window.location.pathname + '#/login'
         Message.error('未登录，或登录失效，请登录')
       } else {
-        Message.error('服务内部错误')
+        if (error.response.data.StackTrace) {
+          ShowError(error.response)
+        } else {
+          Message.error('服务内部错误')
+        }
       }
       let errorInfo = error.response
       if (!errorInfo) {
